@@ -1,0 +1,4481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>DoodleTales ✨</title>
+
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+  ></script>
+
+
+  <style>
+
+    /* ======================================================
+       RESET
+    ====================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --sun: #FFD83D;
+      --sun-light: #FFF3A6;
+      --sky: #54C9F5;
+      --sky-light: #DDF6FF;
+      --green: #72C94A;
+      --green-light: #E5F8D9;
+      --apple: #4FAE3D;
+
+      --ink: #263B3A;
+      --ink-soft: #526866;
+
+      --paper: #FFFDF3;
+      --paper-blue: #F3FBFF;
+
+      --line: #263B3A;
+      --shadow: rgba(38, 59, 58, .18);
+    }
+
+
+    /* ======================================================
+       BODY
+    ====================================================== */
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      font-family:
+        "Arial Rounded MT Bold",
+        "Trebuchet MS",
+        "Comic Sans MS",
+        Arial,
+        sans-serif;
+
+      color: var(--ink);
+
+      overflow-x: hidden;
+
+      background:
+
+        radial-gradient(
+          circle at 5% 5%,
+          rgba(255, 216, 61, .65) 0,
+          transparent 18%
+        ),
+
+        radial-gradient(
+          circle at 96% 9%,
+          rgba(84, 201, 245, .48) 0,
+          transparent 20%
+        ),
+
+        radial-gradient(
+          circle at 5% 90%,
+          rgba(114, 201, 74, .35) 0,
+          transparent 21%
+        ),
+
+        radial-gradient(
+          circle at 94% 88%,
+          rgba(255, 216, 61, .30) 0,
+          transparent 19%
+        ),
+
+        linear-gradient(
+          135deg,
+          #FFFCEB 0%,
+          #F4FCFF 50%,
+          #F2FBEF 100%
+        );
+
+    }
+
+
+    /* Hand-drawn paper texture */
+
+    body::before {
+
+      content: "";
+
+      position: fixed;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      z-index: 0;
+
+      opacity: .30;
+
+      background-image:
+
+        radial-gradient(
+          rgba(38, 59, 58, .10) .7px,
+          transparent .8px
+        ),
+
+        repeating-linear-gradient(
+          0deg,
+          transparent 0,
+          transparent 5px,
+          rgba(38, 59, 58, .018) 6px
+        );
+
+      background-size:
+        13px 13px,
+        100% 7px;
+
+    }
+
+
+    /* ======================================================
+       DECORATIONS
+    ====================================================== */
+
+    .decoration {
+
+      position: fixed;
+
+      pointer-events: none;
+
+      z-index: 0;
+
+      user-select: none;
+
+      filter:
+        drop-shadow(
+          2px 3px 0
+          rgba(38, 59, 58, .12)
+        );
+
+      animation:
+        drift 5s ease-in-out infinite;
+
+    }
+
+
+    .star-1 {
+
+      top: 100px;
+      left: 3%;
+
+      font-size: 38px;
+
+    }
+
+
+    .star-2 {
+
+      top: 300px;
+      right: 4%;
+
+      font-size: 31px;
+
+      animation-delay: 1s;
+
+    }
+
+
+    .star-3 {
+
+      bottom: 120px;
+      left: 7%;
+
+      font-size: 28px;
+
+      animation-delay: 2s;
+
+    }
+
+
+    .cloud-1 {
+
+      top: 175px;
+      right: 7%;
+
+      font-size: 47px;
+
+      animation-delay: 1.5s;
+
+    }
+
+
+    .cloud-2 {
+
+      top: 480px;
+      left: 2%;
+
+      font-size: 40px;
+
+      animation-delay: 2.5s;
+
+    }
+
+
+    @keyframes drift {
+
+      0%,
+      100% {
+
+        transform:
+          translateY(0)
+          rotate(-3deg);
+
+      }
+
+      50% {
+
+        transform:
+          translateY(-12px)
+          rotate(3deg);
+
+      }
+
+    }
+
+
+    /* ======================================================
+       CONTAINER
+    ====================================================== */
+
+    .container {
+
+      position: relative;
+
+      z-index: 1;
+
+      width: min(94%, 1180px);
+
+      margin: 0 auto;
+
+      padding:
+        30px
+        0
+        75px;
+
+    }
+
+
+    /* ======================================================
+       HEADER
+    ====================================================== */
+
+    .header {
+
+      position: relative;
+
+      text-align: center;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .header::before {
+
+      content: "✎  ✦  ★  ✦  ✎";
+
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-size: 17px;
+
+      letter-spacing: 8px;
+
+      color: var(--green);
+
+      transform: rotate(-2deg);
+
+    }
+
+
+    .logo {
+
+      display: inline-block;
+
+      position: relative;
+
+      margin: 0;
+
+      font-size:
+        clamp(
+          44px,
+          7vw,
+          72px
+        );
+
+      font-weight: 900;
+
+      letter-spacing: -3px;
+
+      line-height: 1;
+
+      color: var(--ink);
+
+      text-shadow:
+        3px 3px 0 var(--sun),
+        5px 5px 0 rgba(38, 59, 58, .12);
+
+      transform: rotate(-1deg);
+
+    }
+
+
+    .logo::after {
+
+      content: "";
+
+      display: block;
+
+      height: 8px;
+
+      margin:
+        7px
+        8px
+        0;
+
+      border-radius: 50%;
+
+      background:
+        var(--sky);
+
+      transform:
+        rotate(-1deg);
+
+      box-shadow:
+        5px 2px 0 var(--sky),
+        -3px 1px 0 var(--sky);
+
+    }
+
+
+    .logo-sparkle {
+
+      display: inline-block;
+
+      color: var(--green);
+
+      text-shadow:
+        2px 2px 0 var(--sun);
+
+      animation:
+        sparkle 1.8s
+        ease-in-out
+        infinite;
+
+    }
+
+
+    @keyframes sparkle {
+
+      0%,
+      100% {
+
+        transform:
+          scale(1)
+          rotate(0deg);
+
+      }
+
+      50% {
+
+        transform:
+          scale(1.2)
+          rotate(12deg);
+
+      }
+
+    }
+
+
+    .tagline {
+
+      display: inline-block;
+
+      margin:
+        13px
+        0
+        0;
+
+      padding:
+        8px
+        17px;
+
+      font-size:
+        clamp(
+          16px,
+          3vw,
+          21px
+        );
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+      background:
+        var(--sun-light);
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 14px;
+
+      box-shadow:
+        4px 5px 0 var(--ink);
+
+      transform:
+        rotate(.7deg);
+
+    }
+
+
+    .header-hint {
+
+      margin-top: 9px;
+
+      font-size: 14px;
+
+      color: var(--ink-soft);
+
+    }
+
+
+    /* ======================================================
+       TOP ACTIONS
+    ====================================================== */
+
+    .top-actions {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      margin:
+        25px
+        0
+        21px;
+
+    }
+
+
+    .top-button {
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 15px;
+
+      padding:
+        11px
+        19px;
+
+      font-family: inherit;
+
+      font-size: 13px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+
+    }
+
+
+    .top-button:hover {
+
+      transform:
+        translateY(-3px)
+        rotate(-1deg);
+
+    }
+
+
+    .new-story-button {
+
+      color: var(--ink);
+
+      background:
+        var(--sky-light);
+
+      box-shadow:
+        4px 5px 0 var(--ink);
+
+    }
+
+
+    .new-story-button:hover {
+
+      box-shadow:
+        6px 7px 0 var(--ink);
+
+    }
+
+
+    /* ======================================================
+       STEPS
+    ====================================================== */
+
+    .steps {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      margin:
+        0 auto
+        31px;
+
+      max-width: 700px;
+
+    }
+
+
+    .step {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 7px;
+
+      padding:
+        9px
+        15px;
+
+      border-radius: 13px;
+
+      background:
+        var(--paper);
+
+      border:
+        3px solid
+        var(--ink);
+
+      font-size: 13px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+      box-shadow:
+        3px 4px 0 var(--ink);
+
+      transform:
+        rotate(-1deg);
+
+    }
+
+
+    .step:nth-of-type(3) {
+
+      transform:
+        rotate(1deg);
+
+    }
+
+
+    .step.active {
+
+      color: var(--ink);
+
+      background:
+        var(--paper);
+
+      border:
+        3px solid
+        var(--ink);
+
+      box-shadow:
+        3px 4px 0 var(--ink);
+
+    }
+
+
+    .step-number {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 26px;
+      height: 26px;
+
+      border-radius: 50%;
+
+      background:
+        var(--sun);
+
+      color:
+        var(--ink);
+
+      font-size: 12px;
+
+      border:
+        2px solid
+        var(--ink);
+
+    }
+
+
+    .step.active
+    .step-number {
+
+      background:
+        var(--sun);
+
+      color:
+        var(--ink);
+
+    }
+
+
+    .step-line {
+
+      width: 30px;
+
+      height: 5px;
+
+      border-radius: 10px;
+
+      background:
+        var(--green);
+
+      border:
+        1px solid
+        var(--ink);
+
+      transform:
+        rotate(-3deg);
+
+    }
+
+
+    /* ======================================================
+       MAIN
+    ====================================================== */
+
+    .main-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 430px)
+        minmax(0, 1fr);
+
+      gap: 27px;
+
+      align-items: start;
+
+    }
+
+
+    /* ======================================================
+       CARDS
+    ====================================================== */
+
+    .card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        var(--paper);
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 25px;
+
+      padding: 24px;
+
+      box-shadow:
+        7px 8px 0 var(--ink),
+        12px 14px 0
+        rgba(84, 201, 245, .35);
+
+    }
+
+
+    .card:nth-child(2) {
+
+      box-shadow:
+        7px 8px 0 var(--ink),
+        12px 14px 0
+        rgba(114, 201, 74, .35);
+
+    }
+
+
+    /* Crayon scribble effect */
+
+    .card::before {
+
+      content: "";
+
+      position: absolute;
+
+      width: 150px;
+      height: 80px;
+
+      top: -45px;
+      right: -40px;
+
+      border-radius: 50%;
+
+      background:
+        var(--sun);
+
+      opacity: .55;
+
+      transform:
+        rotate(25deg);
+
+      box-shadow:
+        0 0 0 6px
+        rgba(255, 216, 61, .13);
+
+      pointer-events: none;
+
+    }
+
+
+    .card::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 9px;
+
+      border:
+        2px dashed
+        rgba(38, 59, 58, .13);
+
+      border-radius: 19px;
+
+      pointer-events: none;
+
+    }
+
+
+    .card-header {
+
+      position: relative;
+
+      z-index: 1;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .card-icon {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 55px;
+      height: 55px;
+
+      flex-shrink: 0;
+
+      border-radius: 16px;
+
+      font-size: 27px;
+
+      background:
+        var(--sun);
+
+      border:
+        3px solid
+        var(--ink);
+
+      box-shadow:
+        4px 4px 0 var(--ink);
+
+      transform:
+        rotate(-3deg);
+
+    }
+
+
+    .card-title {
+
+      margin: 0;
+
+      font-size: 22px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+      letter-spacing: -.4px;
+
+    }
+
+
+    .card-subtitle {
+
+      margin:
+        4px
+        0
+        0;
+
+      font-size: 13px;
+
+      color: var(--ink-soft);
+
+      font-weight: 700;
+
+      line-height: 1.35;
+
+    }
+
+
+    /* ======================================================
+       CAMERA
+    ====================================================== */
+
+    .camera-wrapper {
+
+      position: relative;
+
+      overflow: hidden;
+
+      border-radius: 20px;
+
+      padding: 8px;
+
+      background:
+        var(--sky);
+
+      border:
+        3px solid
+        var(--ink);
+
+      box-shadow:
+        5px 6px 0 var(--ink);
+
+    }
+
+
+    video {
+
+      width: 100%;
+
+      aspect-ratio: 4 / 3;
+
+      object-fit: cover;
+
+      display: block;
+
+      border-radius: 13px;
+
+      background:
+        #243536;
+
+      border:
+        3px solid
+        var(--ink);
+
+    }
+
+
+    .scanner-corner {
+
+      position: absolute;
+
+      width: 37px;
+      height: 37px;
+
+      border-color:
+        var(--sun);
+
+      border-style: solid;
+
+      z-index: 2;
+
+      pointer-events: none;
+
+      filter:
+        drop-shadow(
+          2px 2px 0
+          rgba(38,59,58,.55)
+        );
+
+    }
+
+
+    .corner-tl {
+
+      top: 19px;
+      left: 19px;
+
+      border-width:
+        4px
+        0
+        0
+        4px;
+
+      border-radius:
+        9px
+        0
+        0
+        0;
+
+    }
+
+
+    .corner-tr {
+
+      top: 19px;
+      right: 19px;
+
+      border-width:
+        4px
+        4px
+        0
+        0;
+
+      border-radius:
+        0
+        9px
+        0
+        0;
+
+    }
+
+
+    .corner-bl {
+
+      bottom: 19px;
+      left: 19px;
+
+      border-width:
+        0
+        0
+        4px
+        4px;
+
+      border-radius:
+        0
+        0
+        0
+        9px;
+
+    }
+
+
+    .corner-br {
+
+      bottom: 19px;
+      right: 19px;
+
+      border-width:
+        0
+        4px
+        4px
+        0;
+
+      border-radius:
+        0
+        0
+        9px
+        0;
+
+    }
+
+
+    .camera-label {
+
+      position: absolute;
+
+      top: 20px;
+      left: 50%;
+
+      transform:
+        translateX(-50%)
+        rotate(-1deg);
+
+      padding:
+        8px
+        15px;
+
+      border-radius: 10px;
+
+      background:
+        var(--sun);
+
+      border:
+        2px solid
+        var(--ink);
+
+      color:
+        var(--ink);
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      white-space: nowrap;
+
+      box-shadow:
+        3px 3px 0 var(--ink);
+
+    }
+
+
+    canvas {
+
+      display: none;
+
+    }
+
+
+    /* ======================================================
+       SCAN BUTTON
+    ====================================================== */
+
+    .scan-button {
+
+      position: relative;
+
+      width: 100%;
+
+      margin-top: 18px;
+
+      padding:
+        17px
+        22px;
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 17px;
+
+      font-family: inherit;
+
+      font-size: 18px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+      cursor: pointer;
+
+      background:
+        var(--sun);
+
+      box-shadow:
+        5px 6px 0 var(--ink);
+
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+
+      transform:
+        rotate(-.5deg);
+
+    }
+
+
+    .scan-button::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 12%;
+
+      right: 12%;
+
+      bottom: 5px;
+
+      height: 3px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(38,59,58,.16);
+
+    }
+
+
+    .scan-button:hover {
+
+      transform:
+        translateY(-3px)
+        rotate(.5deg);
+
+      box-shadow:
+        7px 8px 0 var(--ink);
+
+      background:
+        #FFE45B;
+
+    }
+
+
+    .scan-button:active {
+
+      transform:
+        translateY(3px);
+
+      box-shadow:
+        2px 3px 0 var(--ink);
+
+    }
+
+
+    .scan-button:disabled {
+
+      opacity: .65;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+    }
+
+
+    .tip {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 7px;
+
+      margin-top: 15px;
+
+      color: var(--ink-soft);
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* ======================================================
+       STORY CARD
+    ====================================================== */
+
+    .story-card {
+
+      min-width: 0;
+
+    }
+
+
+    .story-empty {
+
+      position: relative;
+
+      overflow: hidden;
+
+      text-align: center;
+
+      padding:
+        40px
+        20px;
+
+      border-radius: 19px;
+
+      background:
+        var(--sky-light);
+
+      border:
+        3px dashed
+        var(--ink);
+
+      box-shadow:
+        inset 0 0 0 5px
+        rgba(255,255,255,.5);
+
+    }
+
+
+    .story-empty::before {
+
+      content: "✦";
+
+      position: absolute;
+
+      top: 14px;
+      left: 22px;
+
+      color:
+        var(--green);
+
+      font-size: 24px;
+
+      transform:
+        rotate(-15deg);
+
+    }
+
+
+    .story-empty::after {
+
+      content: "★";
+
+      position: absolute;
+
+      bottom: 14px;
+      right: 22px;
+
+      color:
+        var(--sun);
+
+      font-size: 24px;
+
+      transform:
+        rotate(12deg);
+
+      text-shadow:
+        1px 1px 0 var(--ink);
+
+    }
+
+
+    .empty-book {
+
+      display: block;
+
+      font-size: 66px;
+
+      margin-bottom: 14px;
+
+      animation:
+        bookFloat 2.5s
+        ease-in-out
+        infinite;
+
+      filter:
+        drop-shadow(
+          4px 5px 0
+          rgba(38,59,58,.16)
+        );
+
+    }
+
+
+    @keyframes bookFloat {
+
+      0%,
+      100% {
+
+        transform:
+          translateY(0)
+          rotate(-2deg);
+
+      }
+
+      50% {
+
+        transform:
+          translateY(-8px)
+          rotate(2deg);
+
+      }
+
+    }
+
+
+    .empty-title {
+
+      margin:
+        0
+        0
+        9px;
+
+      font-size: 21px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+    }
+
+
+    .empty-description {
+
+      max-width: 410px;
+
+      margin: 0 auto;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+
+      color: var(--ink-soft);
+
+      font-weight: 600;
+
+    }
+
+
+    /* ======================================================
+       CHAPTERS
+    ====================================================== */
+
+    #chaptersContainer {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 20px;
+
+    }
+
+
+    .chapter-card {
+
+      overflow: hidden;
+
+      border-radius: 21px;
+
+      background:
+        var(--paper);
+
+      border:
+        3px solid
+        var(--ink);
+
+      box-shadow:
+        5px 6px 0 var(--ink);
+
+      animation:
+        chapterAppear
+        .5s ease;
+
+    }
+
+
+    .chapter-card:nth-child(3n + 1) {
+
+      box-shadow:
+        5px 6px 0 var(--ink),
+        9px 10px 0
+        rgba(255, 216, 61, .55);
+
+    }
+
+
+    .chapter-card:nth-child(3n + 2) {
+
+      box-shadow:
+        5px 6px 0 var(--ink),
+        9px 10px 0
+        rgba(84, 201, 245, .48);
+
+    }
+
+
+    .chapter-card:nth-child(3n) {
+
+      box-shadow:
+        5px 6px 0 var(--ink),
+        9px 10px 0
+        rgba(114, 201, 74, .45);
+
+    }
+
+
+    @keyframes chapterAppear {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          translateY(15px)
+          scale(.98);
+
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+
+      }
+
+    }
+
+
+    .chapter-header {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      padding:
+        14px
+        17px;
+
+      background:
+        var(--sun-light);
+
+      border-bottom:
+        3px solid
+        var(--ink);
+
+    }
+
+
+    .chapter-card:nth-child(3n + 2)
+    .chapter-header {
+
+      background:
+        var(--sky-light);
+
+    }
+
+
+    .chapter-card:nth-child(3n)
+    .chapter-header {
+
+      background:
+        var(--green-light);
+
+    }
+
+
+    .chapter-number {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 7px;
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+      text-transform: uppercase;
+
+      letter-spacing: .7px;
+
+    }
+
+
+    .chapter-character {
+
+      padding:
+        6px
+        10px;
+
+      border-radius: 10px;
+
+      background:
+        white;
+
+      border:
+        2px solid
+        var(--ink);
+
+      font-size: 11px;
+
+      color: var(--ink);
+
+      font-weight: 900;
+
+      box-shadow:
+        2px 2px 0
+        rgba(38,59,58,.5);
+
+    }
+
+
+    /* ======================================================
+       PICTURES STAY COMPLETELY FIXED
+    ====================================================== */
+
+    .chapter-drawing {
+
+      width: 100%;
+
+      max-height: 320px;
+
+      object-fit: contain;
+
+      display: block;
+
+      background:
+        white;
+
+      animation: none !important;
+
+      transform: none !important;
+
+    }
+
+
+    .chapter-story {
+
+      position: relative;
+
+      padding:
+        21px
+        20px
+        23px;
+
+      font-family:
+        "Arial Rounded MT Bold",
+        "Trebuchet MS",
+        Arial,
+        sans-serif;
+
+      font-size: 17px;
+
+      line-height: 1.7;
+
+      color: var(--ink);
+
+      white-space: pre-line;
+
+      background:
+        var(--paper);
+
+      border-top:
+        2px dashed
+        rgba(38,59,58,.15);
+
+    }
+
+
+    .chapter-story::before {
+
+      content: "“";
+
+      position: absolute;
+
+      left: 11px;
+
+      top: 3px;
+
+      font-family:
+        Georgia,
+        serif;
+
+      font-size: 42px;
+
+      color:
+        var(--sky);
+
+      opacity: .75;
+
+    }
+
+
+    .chapter-story::first-letter {
+
+      font-size: 29px;
+
+      font-weight: bold;
+
+      color: var(--apple);
+
+    }
+
+
+    /* ======================================================
+       CHOICES
+    ====================================================== */
+
+    .choice-area {
+
+      margin-top: 23px;
+
+      padding-top: 4px;
+
+    }
+
+
+    .choice-heading {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      margin-bottom: 12px;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+    }
+
+
+    .choices {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 12px;
+
+    }
+
+
+    .story-choice {
+
+      position: relative;
+
+      min-height: 74px;
+
+      padding:
+        13px
+        15px
+        13px
+        48px;
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 15px;
+
+      background:
+        var(--sky-light);
+
+      color: var(--ink);
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      line-height: 1.4;
+
+      font-weight: 900;
+
+      text-align: left;
+
+      cursor: pointer;
+
+      box-shadow:
+        4px 5px 0 var(--ink);
+
+      transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+
+    }
+
+
+    .story-choice:nth-child(2) {
+
+      background:
+        var(--green-light);
+
+      transform:
+        rotate(.7deg);
+
+    }
+
+
+    .story-choice::before {
+
+      content: "★";
+
+      position: absolute;
+
+      left: 13px;
+
+      top: 50%;
+
+      transform:
+        translateY(-50%)
+        rotate(-8deg);
+
+      width: 27px;
+      height: 27px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      border-radius: 8px;
+
+      background:
+        var(--sun);
+
+      border:
+        2px solid
+        var(--ink);
+
+      font-size: 13px;
+
+      box-shadow:
+        2px 2px 0
+        var(--ink);
+
+    }
+
+
+    .story-choice:hover {
+
+      transform:
+        translateY(-3px)
+        rotate(-1deg);
+
+      box-shadow:
+        6px 8px 0 var(--ink);
+
+      background:
+        #E9F9FF;
+
+    }
+
+
+    .story-choice:nth-child(2):hover {
+
+      background:
+        #ECF9E7;
+
+    }
+
+
+    .story-choice:disabled {
+
+      opacity: .5;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+    }
+
+
+    /* ======================================================
+       STORY ACTIONS
+    ====================================================== */
+
+    .story-actions {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        1fr;
+
+      gap: 11px;
+
+      margin-top: 22px;
+
+    }
+
+
+    .story-action {
+
+      padding:
+        15px
+        15px;
+
+      border:
+        3px solid
+        var(--ink);
+
+      border-radius: 15px;
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+
+      box-shadow:
+        4px 5px 0 var(--ink);
+
+    }
+
+
+    .story-action:hover {
+
+      transform:
+        translateY(-2px)
+        rotate(-1deg);
+
+      box-shadow:
+        6px 7px 0 var(--ink);
+
+    }
+
+
+    .finish-button {
+
+      background:
+        var(--sun);
+
+      color: var(--ink);
+
+    }
+
+
+    .pdf-button {
+
+      background:
+        var(--sky);
+
+      color: var(--ink);
+
+    }
+
+
+    .story-action:disabled {
+
+      opacity: .45;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+    }
+
+
+    /* ======================================================
+       FINISHED
+    ====================================================== */
+
+    .finished-banner {
+
+      display: none;
+
+      position: relative;
+
+      overflow: hidden;
+
+      margin-bottom: 19px;
+
+      padding:
+        23px
+        18px;
+
+      text-align: center;
+
+      border-radius: 19px;
+
+      background:
+        var(--sun-light);
+
+      border:
+        3px solid
+        var(--ink);
+
+      box-shadow:
+        5px 6px 0 var(--ink);
+
+    }
+
+
+    .finished-banner::before {
+
+      content:
+        "✨ ⭐ 🌈 ⭐ ✨";
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      font-size: 19px;
+
+    }
+
+
+    .finished-banner::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 10%;
+
+      right: 10%;
+
+      bottom: 8px;
+
+      height: 5px;
+
+      border-radius: 50%;
+
+      background:
+        var(--green);
+
+      transform:
+        rotate(-1deg);
+
+    }
+
+
+    .finished-banner.show {
+
+      display: block;
+
+      animation:
+        chapterAppear
+        .5s ease;
+
+    }
+
+
+    .finished-title {
+
+      margin: 0;
+
+      font-size: 25px;
+
+      font-weight: 900;
+
+      color: var(--ink);
+
+    }
+
+
+    .finished-subtitle {
+
+      margin:
+        6px
+        0
+        0;
+
+      font-size: 13px;
+
+      color: var(--ink-soft);
+
+      font-weight: 700;
+
+    }
+
+
+    /* ======================================================
+       NARRATION
+    ====================================================== */
+
+    .narration {
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 7px;
+
+      margin:
+        12px
+        0;
+
+      padding:
+        8px
+        12px;
+
+      border-radius: 10px;
+
+      border:
+        2px solid
+        var(--ink);
+
+      font-size: 11px;
+
+      color: var(--ink);
+
+      background:
+        var(--sky-light);
+
+      font-weight: 900;
+
+      box-shadow:
+        2px 3px 0 var(--ink);
+
+    }
+
+
+    .narration.visible {
+
+      display: flex;
+
+    }
+
+
+    .sound-dot {
+
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background:
+        var(--green);
+
+      border:
+        1px solid
+        var(--ink);
+
+      animation:
+        soundPulse
+        .8s ease-in-out
+        infinite alternate;
+
+    }
+
+
+    @keyframes soundPulse {
+
+      from {
+
+        transform:
+          scale(.7);
+
+        opacity: .5;
+
+      }
+
+      to {
+
+        transform:
+          scale(1.2);
+
+        opacity: 1;
+
+      }
+
+    }
+
+
+    /* ======================================================
+       LOADING
+    ====================================================== */
+
+    .loading-dots {
+
+      display: inline-flex;
+
+      gap: 5px;
+
+      margin-left: 6px;
+
+    }
+
+
+    .loading-dots span {
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background:
+        var(--ink);
+
+      animation:
+        loadingDot 1s
+        infinite;
+
+    }
+
+
+    .loading-dots
+    span:nth-child(2) {
+
+      animation-delay: .15s;
+
+    }
+
+
+    .loading-dots
+    span:nth-child(3) {
+
+      animation-delay: .3s;
+
+    }
+
+
+    @keyframes loadingDot {
+
+      0%,
+      70%,
+      100% {
+
+        transform:
+          translateY(0);
+
+        opacity: .5;
+
+      }
+
+      35% {
+
+        transform:
+          translateY(-5px);
+
+        opacity: 1;
+
+      }
+
+    }
+
+
+    /* ======================================================
+       FOOTER
+    ====================================================== */
+
+    .footer {
+
+      display: inline-block;
+
+      position: relative;
+
+      left: 50%;
+
+      transform:
+        translateX(-50%)
+        rotate(-1deg);
+
+      text-align: center;
+
+      margin-top: 32px;
+
+      padding:
+        8px
+        15px;
+
+      font-size: 12px;
+
+      color: var(--ink-soft);
+
+      font-weight: 700;
+
+      background:
+        white;
+
+      border:
+        2px solid
+        var(--ink);
+
+      border-radius: 10px;
+
+      box-shadow:
+        3px 3px 0 var(--ink);
+
+    }
+
+
+    .footer span {
+
+      color: var(--apple);
+
+      font-weight: 900;
+
+    }
+
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 850px) {
+
+      .main-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .decoration {
+
+        display: none;
+
+      }
+
+    }
+
+
+    @media (max-width: 520px) {
+
+      .container {
+
+        width: 94%;
+
+        padding-top: 19px;
+
+      }
+
+
+      .logo {
+
+        font-size: 43px;
+
+        letter-spacing: -2px;
+
+      }
+
+
+      .tagline {
+
+        font-size: 16px;
+
+        box-shadow:
+          3px 4px 0 var(--ink);
+
+      }
+
+
+      .steps {
+
+        gap: 4px;
+
+      }
+
+
+      .step {
+
+        padding:
+          7px
+          9px;
+
+        font-size: 11px;
+
+        box-shadow:
+          2px 3px 0 var(--ink);
+
+      }
+
+
+      .step-line {
+
+        width: 10px;
+
+      }
+
+
+      .card {
+
+        padding: 16px;
+
+        border-radius: 21px;
+
+        box-shadow:
+          5px 6px 0 var(--ink);
+
+      }
+
+
+      .card-title {
+
+        font-size: 19px;
+
+      }
+
+
+      .card-icon {
+
+        width: 47px;
+        height: 47px;
+
+        font-size: 24px;
+
+      }
+
+
+      .story-empty {
+
+        padding:
+          32px
+          16px;
+
+      }
+
+
+      .empty-book {
+
+        font-size: 56px;
+
+      }
+
+
+      .choices {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .story-actions {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .chapter-story {
+
+        font-size: 16px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- DECORATIONS -->
+
+  <div class="decoration star-1">⭐</div>
+
+  <div class="decoration star-2">✨</div>
+
+  <div class="decoration star-3">🌟</div>
+
+  <div class="decoration cloud-1">☁️</div>
+
+  <div class="decoration cloud-2">☁️</div>
+
+
+  <div class="container">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <h1 class="logo">
+
+        🎨 DoodleTales
+
+        <span class="logo-sparkle">
+          ✦
+        </span>
+
+      </h1>
+
+
+      <p class="tagline">
+
+        Your drawings have a story to tell!
+
+      </p>
+
+    </header>
+
+
+    <!-- TOP ACTIONS -->
+
+    <div class="top-actions">
+
+      <button
+        id="newStoryButton"
+        class="top-button new-story-button"
+      >
+
+        🆕 New Story
+
+      </button>
+
+    </div>
+
+
+    <!-- STEPS -->
+
+    <div class="steps">
+
+      <div class="step active">
+
+        <span class="step-number">
+          1
+        </span>
+
+        Draw
+
+      </div>
+
+
+      <div class="step-line"></div>
+
+
+      <div class="step">
+
+        <span class="step-number">
+          2
+        </span>
+
+        Scan
+
+      </div>
+
+
+      <div class="step-line"></div>
+
+
+      <div class="step">
+
+        <span class="step-number">
+          3
+        </span>
+
+        Story
+
+      </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <main class="main-grid">
+
+
+      <!-- CAMERA -->
+
+      <section class="card">
+
+
+        <div class="card-header">
+
+          <div class="card-icon">
+            📸
+          </div>
+
+
+          <div>
+
+            <h2 class="card-title">
+              Add a Drawing or Picture
+            </h2>
+
+            <p class="card-subtitle">
+              Create the next part of your adventure!
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="camera-wrapper">
+
+          <video
+            id="video"
+            autoplay
+            playsinline
+          ></video>
+
+
+          <div class="camera-label">
+            📷 Point at your drawing
+          </div>
+
+
+          <div
+            class="scanner-corner corner-tl"
+          ></div>
+
+
+          <div
+            class="scanner-corner corner-tr"
+          ></div>
+
+
+          <div
+            class="scanner-corner corner-bl"
+          ></div>
+
+
+          <div
+            class="scanner-corner corner-br"
+          ></div>
+
+        </div>
+
+
+        <canvas id="canvas"></canvas>
+
+
+        <button
+          id="captureButton"
+          class="scan-button"
+        >
+
+          ✨ Add Drawing to Story
+
+        </button>
+
+
+        <div class="tip">
+
+          💡 Each new drawing becomes a new chapter!
+
+        </div>
+
+
+      </section>
+
+
+      <!-- STORY -->
+
+      <section class="card story-card">
+
+
+        <div class="card-header">
+
+          <div class="card-icon">
+            📖
+          </div>
+
+
+          <div>
+
+            <h2 class="card-title">
+              Your Adventure
+            </h2>
+
+            <p class="card-subtitle">
+              Watch your drawings become a story!
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+          id="emptyStory"
+          class="story-empty"
+        >
+
+          <span class="empty-book">
+            📖
+          </span>
+
+
+          <h3 class="empty-title">
+
+            Your adventure starts here!
+
+          </h3>
+
+
+          <p class="empty-description">
+
+            Draw something, scan it,
+            and watch Gemini turn it
+            into the first chapter.
+
+          </p>
+
+        </div>
+
+
+        <!-- FINISHED -->
+
+        <div
+          id="finishedBanner"
+          class="finished-banner"
+        >
+
+          <h2 class="finished-title">
+
+            🎉 Your Story Is Complete!
+
+          </h2>
+
+
+          <p class="finished-subtitle">
+
+            You created your very own
+            DoodleTales adventure!
+
+          </p>
+
+        </div>
+
+
+        <!-- CHAPTERS -->
+
+        <div
+          id="chaptersContainer"
+        ></div>
+
+
+        <!-- NARRATION -->
+
+        <div
+          id="narrationIndicator"
+          class="narration"
+        >
+
+          <span class="sound-dot"></span>
+
+          🔊 Reading your story...
+
+        </div>
+
+
+        <!-- CURRENT CHOICES -->
+
+        <div
+          id="choiceArea"
+          class="choice-area"
+          style="display:none;"
+        >
+
+          <div class="choice-heading">
+
+            <span>🪄</span>
+
+            What should happen next?
+
+          </div>
+
+
+          <div
+            id="choices"
+            class="choices"
+          ></div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div
+          id="storyActions"
+          class="story-actions"
+          style="display:none;"
+        >
+
+          <button
+            id="finishButton"
+            class="story-action finish-button"
+          >
+
+            🏁 Finish Story
+
+          </button>
+
+
+          <button
+            id="pdfButton"
+            class="story-action pdf-button"
+            disabled
+          >
+
+            📄 Save as PDF
+
+          </button>
+
+        </div>
+
+
+      </section>
+
+    </main>
+
+
+    <footer class="footer">
+
+      ✨ Powered by
+      <span>Gemini</span>
+      • Made for curious creators
+
+    </footer>
+
+
+  </div>
+
+
+  <script>
+
+    // ========================================================
+    // STATE
+    // ========================================================
+
+    let currentStoryData = null;
+
+    let currentDrawing = null;
+
+    let chapters = [];
+
+    let chapterNumber = 0;
+
+    let isFinished = false;
+
+
+    // ========================================================
+    // ELEMENTS
+    // ========================================================
+
+    const video =
+      document.getElementById(
+        'video'
+      );
+
+
+    const canvas =
+      document.getElementById(
+        'canvas'
+      );
+
+
+    const captureButton =
+      document.getElementById(
+        'captureButton'
+      );
+
+
+    const emptyStory =
+      document.getElementById(
+        'emptyStory'
+      );
+
+
+    const chaptersContainer =
+      document.getElementById(
+        'chaptersContainer'
+      );
+
+
+    const choices =
+      document.getElementById(
+        'choices'
+      );
+
+
+    const choiceArea =
+      document.getElementById(
+        'choiceArea'
+      );
+
+
+    const storyActions =
+      document.getElementById(
+        'storyActions'
+      );
+
+
+    const finishButton =
+      document.getElementById(
+        'finishButton'
+      );
+
+
+    const pdfButton =
+      document.getElementById(
+        'pdfButton'
+      );
+
+
+    const newStoryButton =
+      document.getElementById(
+        'newStoryButton'
+      );
+
+
+    const finishedBanner =
+      document.getElementById(
+        'finishedBanner'
+      );
+
+
+    const narrationIndicator =
+      document.getElementById(
+        'narrationIndicator'
+      );
+
+
+    // ========================================================
+    // CAMERA
+    // ========================================================
+
+    async function startCamera() {
+
+      try {
+
+        const stream =
+          await navigator
+            .mediaDevices
+            .getUserMedia({
+
+              video: {
+                facingMode:
+                  'environment'
+              },
+
+              audio: false
+
+            });
+
+
+        video.srcObject =
+          stream;
+
+
+        console.log(
+          '📷 Camera started'
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          '❌ Camera error:',
+          error
+        );
+
+
+        alert(
+          'Could not access the camera. Please allow camera access.'
+        );
+
+      }
+
+    }
+
+
+    // ========================================================
+    // CAPTURE
+    // ========================================================
+
+    function captureDrawing() {
+
+      if (
+        !video.videoWidth ||
+        !video.videoHeight
+      ) {
+
+        alert(
+          'Camera is not ready yet.'
+        );
+
+        return null;
+
+      }
+
+
+      canvas.width =
+        video.videoWidth;
+
+
+      canvas.height =
+        video.videoHeight;
+
+
+      const context =
+        canvas.getContext(
+          '2d'
+        );
+
+
+      context.drawImage(
+
+        video,
+
+        0,
+        0,
+
+        canvas.width,
+        canvas.height
+
+      );
+
+
+      const imageBase64 =
+        canvas.toDataURL(
+          'image/jpeg',
+          0.85
+        );
+
+
+      currentDrawing =
+        imageBase64;
+
+
+      console.log(
+        '📸 Drawing captured'
+      );
+
+
+      return imageBase64;
+
+    }
+
+
+    // ========================================================
+    // GET PREVIOUS STORY
+    // ========================================================
+
+    function getPreviousStory() {
+
+      if (
+        chapters.length === 0
+      ) {
+
+        return '';
+
+      }
+
+
+      return chapters
+        .map(
+          chapter =>
+            `Chapter ${chapter.number}:\n${chapter.story}`
+        )
+        .join('\n\n');
+
+    }
+
+
+    // ========================================================
+    // SCAN
+    // ========================================================
+
+    async function scanDrawing() {
+
+      if (isFinished) {
+
+        alert(
+          'Your story is finished! Start a New Story to create another adventure.'
+        );
+
+        return;
+
+      }
+
+
+      const imageBase64 =
+        captureDrawing();
+
+
+      if (!imageBase64) {
+
+        return;
+
+      }
+
+
+      chapterNumber =
+        chapters.length + 1;
+
+
+      const previousStory =
+        getPreviousStory();
+
+
+      captureButton.disabled =
+        true;
+
+
+      captureButton.innerHTML = `
+
+        ✨ Creating Chapter ${chapterNumber}
+
+        <span class="loading-dots">
+
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </span>
+
+      `;
+
+
+      try {
+
+        console.log('');
+        console.log(
+          '=============================='
+        );
+
+        console.log(
+          `📖 SCANNING CHAPTER ${chapterNumber}`
+        );
+
+        console.log(
+          '=============================='
+        );
+
+
+        const response =
+          await fetch(
+            '/api/scan-drawing',
+            {
+
+              method: 'POST',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json'
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  imageBase64,
+
+                  previousStory,
+
+                  chapterNumber
+
+                })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'Could not create the chapter.'
+          );
+
+        }
+
+
+        currentStoryData =
+          data;
+
+
+        currentDrawing =
+          imageBase64;
+
+
+        const chapter = {
+
+          number:
+            chapterNumber,
+
+          drawing:
+            imageBase64,
+
+          story:
+            data.story,
+
+          character:
+            data.character,
+
+          scene:
+            data.scene,
+
+          animation:
+            data.animation,
+
+          choices:
+            data.choices
+
+        };
+
+
+        chapters.push(
+          chapter
+        );
+
+
+        emptyStory.style.display =
+          'none';
+
+
+        storyActions.style.display =
+          'grid';
+
+
+        pdfButton.disabled =
+          false;
+
+
+        addChapterToPage(
+          chapter
+        );
+
+
+        showChoices(
+          data.choices
+        );
+
+
+        animateLatestDrawing(
+          data.animation
+        );
+
+
+        speakStory(
+          data.story
+        );
+
+
+        setTimeout(
+          () => {
+
+            const chapterElement =
+              document.getElementById(
+                `chapter-${chapter.number}`
+              );
+
+
+            if (chapterElement) {
+
+              chapterElement.scrollIntoView({
+
+                behavior:
+                  'smooth',
+
+                block:
+                  'center'
+
+              });
+
+            }
+
+          },
+          300
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          '❌ Scan error:',
+          error
+        );
+
+
+        alert(
+          error.message ||
+          'Could not create the chapter.'
+        );
+
+      } finally {
+
+        captureButton.disabled =
+          false;
+
+
+        captureButton.innerHTML =
+          '✨ Add Drawing to Story';
+
+      }
+
+    }
+
+
+    // ========================================================
+    // ADD CHAPTER TO PAGE
+    // ========================================================
+
+    function addChapterToPage(
+      chapter
+    ) {
+
+      const card =
+        document.createElement(
+          'article'
+        );
+
+
+      card.className =
+        'chapter-card';
+
+
+      card.id =
+        `chapter-${chapter.number}`;
+
+
+      card.innerHTML = `
+
+        <div class="chapter-header">
+
+          <div class="chapter-number">
+
+            ✨ Chapter ${chapter.number}
+
+          </div>
+
+
+          <div class="chapter-character">
+
+            ${escapeHtml(
+              chapter.character ||
+              'Your character'
+            )}
+
+          </div>
+
+        </div>
+
+
+        <img
+          class="chapter-drawing"
+          src="${chapter.drawing}"
+          alt="Drawing for Chapter ${chapter.number}"
+        />
+
+
+        <div class="chapter-story">
+
+          ${escapeHtml(
+            chapter.story
+          )}
+
+        </div>
+
+      `;
+
+
+      chaptersContainer.appendChild(
+        card
+      );
+
+    }
+
+
+    // ========================================================
+    // ESCAPE HTML
+    // ========================================================
+
+    function escapeHtml(
+      text
+    ) {
+
+      const div =
+        document.createElement(
+          'div'
+        );
+
+
+      div.textContent =
+        text || '';
+
+
+      return div.innerHTML;
+
+    }
+
+
+    // ========================================================
+    // SHOW CHOICES
+    // ========================================================
+
+    function showChoices(
+      choiceList
+    ) {
+
+      choices.innerHTML =
+        '';
+
+
+      if (
+        !Array.isArray(
+          choiceList
+        ) ||
+        choiceList.length === 0
+      ) {
+
+        choiceArea.style.display =
+          'none';
+
+        return;
+
+      }
+
+
+      choiceArea.style.display =
+        'block';
+
+
+      choiceList
+        .slice(0, 2)
+        .forEach(
+          choice => {
+
+            const button =
+              document.createElement(
+                'button'
+              );
+
+
+            button.className =
+              'story-choice';
+
+
+            button.textContent =
+              choice;
+
+
+            button.addEventListener(
+              'click',
+              () => {
+
+                continueStory(
+                  choice
+                );
+
+              }
+            );
+
+
+            choices.appendChild(
+              button
+            );
+
+          }
+        );
+
+    }
+
+
+    // ========================================================
+    // CONTINUE STORY
+    // ========================================================
+
+    async function continueStory(
+      choice
+    ) {
+
+      if (
+        !currentStoryData ||
+        chapters.length === 0
+      ) {
+
+        return;
+
+      }
+
+
+      const buttons =
+        document.querySelectorAll(
+          '.story-choice'
+        );
+
+
+      buttons.forEach(
+        button => {
+
+          button.disabled =
+            true;
+
+        }
+      );
+
+
+      const latestChapter =
+        chapters[
+          chapters.length - 1
+        ];
+
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/continue-story',
+            {
+
+              method: 'POST',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json'
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  character:
+                    currentStoryData.character,
+
+                  currentStory:
+                    getPreviousStory(),
+
+                  choice,
+
+                  currentScene:
+                    currentStoryData.scene
+
+                })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'Could not continue the story.'
+          );
+
+        }
+
+
+        chapterNumber =
+          chapters.length + 1;
+
+
+        currentStoryData = {
+
+          ...currentStoryData,
+
+          story:
+            data.story,
+
+          scene:
+            data.scene,
+
+          animation:
+            data.animation,
+
+          choices:
+            data.choices
+
+        };
+
+
+        const newChapter = {
+
+          number:
+            chapterNumber,
+
+          drawing:
+            latestChapter.drawing,
+
+          story:
+            data.story,
+
+          character:
+            data.character ||
+            latestChapter.character,
+
+          scene:
+            data.scene,
+
+          animation:
+            data.animation,
+
+          choices:
+            data.choices
+
+        };
+
+
+        chapters.push(
+          newChapter
+        );
+
+
+        addChapterToPage(
+          newChapter
+        );
+
+
+        showChoices(
+          data.choices
+        );
+
+
+        animateLatestDrawing(
+          data.animation
+        );
+
+
+        speakStory(
+          data.story
+        );
+
+
+        setTimeout(
+          () => {
+
+            const chapterElement =
+              document.getElementById(
+                `chapter-${newChapter.number}`
+              );
+
+
+            if (chapterElement) {
+
+              chapterElement.scrollIntoView({
+
+                behavior:
+                  'smooth',
+
+                block:
+                  'center'
+
+              });
+
+            }
+
+          },
+          300
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          '❌ Continuation error:',
+          error
+        );
+
+
+        alert(
+          error.message ||
+          'Could not continue the story.'
+        );
+
+
+        buttons.forEach(
+          button => {
+
+            button.disabled =
+              false;
+
+          }
+        );
+
+      }
+
+    }
+
+
+    // ========================================================
+    // KEEP DRAWING FIXED
+    // ========================================================
+
+    function animateLatestDrawing(
+      animation
+    ) {
+
+      const latestChapter =
+        chapters.length;
+
+
+      const chapterElement =
+        document.getElementById(
+          `chapter-${latestChapter}`
+        );
+
+
+      if (
+        !chapterElement
+      ) {
+
+        return;
+
+      }
+
+
+      const image =
+        chapterElement.querySelector(
+          '.chapter-drawing'
+        );
+
+
+      if (!image) {
+
+        return;
+
+      }
+
+
+      image.classList.remove(
+
+        'fly',
+        'bounce',
+        'walk',
+        'jump',
+        'shake',
+        'float',
+        'spin',
+        'idle'
+
+      );
+
+
+      image.style.animation =
+        'none';
+
+      image.style.transform =
+        'none';
+
+    }
+
+
+    // ========================================================
+    // SPEAK
+    // ========================================================
+
+    function speakStory(
+      text
+    ) {
+
+      if (
+        !text ||
+        !(
+          'speechSynthesis'
+          in window
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      window.speechSynthesis.cancel();
+
+
+      narrationIndicator.classList.add(
+        'visible'
+      );
+
+
+      const utterance =
+        new SpeechSynthesisUtterance(
+          text
+        );
+
+
+      const voices =
+        window.speechSynthesis.getVoices();
+
+
+      const preferredVoice =
+        voices.find(
+          voice =>
+            voice.name
+              .toLowerCase()
+              .includes('samantha')
+        ) ||
+        voices.find(
+          voice =>
+            voice.name
+              .toLowerCase()
+              .includes('google us english')
+        ) ||
+        voices.find(
+          voice =>
+            voice.lang === 'en-US'
+        ) ||
+        voices.find(
+          voice =>
+            voice.lang.startsWith('en')
+        );
+
+
+      if (preferredVoice) {
+
+        utterance.voice =
+          preferredVoice;
+
+      }
+
+
+      utterance.lang =
+        'en-US';
+
+
+      utterance.rate =
+        0.88;
+
+
+      utterance.pitch =
+        1.12;
+
+
+      utterance.volume =
+        1;
+
+
+      utterance.onend =
+        () => {
+
+          narrationIndicator.classList.remove(
+            'visible'
+          );
+
+        };
+
+
+      window.speechSynthesis.speak(
+        utterance
+      );
+
+    }
+
+
+    // ========================================================
+    // FINISH STORY
+    // ========================================================
+
+    function finishStory() {
+
+      if (
+        chapters.length === 0
+      ) {
+
+        alert(
+          'Add at least one drawing before finishing your story.'
+        );
+
+        return;
+
+      }
+
+
+      isFinished =
+        true;
+
+
+      finishedBanner.classList.add(
+        'show'
+      );
+
+
+      choiceArea.style.display =
+        'none';
+
+
+      finishButton.disabled =
+        true;
+
+
+      captureButton.disabled =
+        true;
+
+
+      captureButton.textContent =
+        '🏁 Story Finished!';
+
+
+      pdfButton.disabled =
+        false;
+
+
+      if (
+        'speechSynthesis'
+        in window
+      ) {
+
+        window.speechSynthesis.cancel();
+
+      }
+
+
+      finishedBanner.scrollIntoView({
+
+        behavior:
+          'smooth',
+
+        block:
+          'center'
+
+      });
+
+    }
+
+
+    // ========================================================
+    // NEW STORY
+    // ========================================================
+
+    function newStory() {
+
+      if (
+        chapters.length > 0
+      ) {
+
+        const confirmed =
+          confirm(
+            'Start a new story? Your current adventure will be cleared.'
+          );
+
+
+        if (!confirmed) {
+
+          return;
+
+        }
+
+      }
+
+
+      if (
+        'speechSynthesis'
+        in window
+      ) {
+
+        window.speechSynthesis.cancel();
+
+      }
+
+
+      currentStoryData =
+        null;
+
+
+      currentDrawing =
+        null;
+
+
+      chapters =
+        [];
+
+
+      chapterNumber =
+        0;
+
+
+      isFinished =
+        false;
+
+
+      chaptersContainer.innerHTML =
+        '';
+
+
+      emptyStory.style.display =
+        'block';
+
+
+      finishedBanner.classList.remove(
+        'show'
+      );
+
+
+      choiceArea.style.display =
+        'none';
+
+
+      storyActions.style.display =
+        'none';
+
+
+      choices.innerHTML =
+        '';
+
+
+      narrationIndicator.classList.remove(
+        'visible'
+      );
+
+
+      captureButton.disabled =
+        false;
+
+
+      captureButton.textContent =
+        '✨ Add Drawing to Story';
+
+
+      finishButton.disabled =
+        false;
+
+
+      pdfButton.disabled =
+        true;
+
+
+      console.log(
+        '🆕 New story started'
+      );
+
+    }
+
+
+    // ========================================================
+    // SAVE STORY AS PDF
+    // ========================================================
+
+    async function saveAsPDF() {
+
+      if (
+        chapters.length === 0
+      ) {
+
+        alert(
+          'Add at least one chapter first.'
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !window.jspdf ||
+        !window.jspdf.jsPDF
+      ) {
+
+        alert(
+          'PDF library could not be loaded. Please check your internet connection and try again.'
+        );
+
+        return;
+
+      }
+
+
+      pdfButton.disabled =
+        true;
+
+
+      pdfButton.textContent =
+        '📄 Creating PDF...';
+
+
+      try {
+
+        const {
+          jsPDF
+        } =
+          window.jspdf;
+
+
+        const pdf =
+          new jsPDF({
+
+            orientation:
+              'portrait',
+
+            unit:
+              'mm',
+
+            format:
+              'a4'
+
+          });
+
+
+        const pageWidth =
+          pdf.internal.pageSize.getWidth();
+
+
+        const pageHeight =
+          pdf.internal.pageSize.getHeight();
+
+
+        const margin =
+          18;
+
+
+        pdf.setFont(
+          'helvetica',
+          'bold'
+        );
+
+
+        pdf.setFontSize(
+          30
+        );
+
+
+        pdf.text(
+          'DoodleTales',
+          pageWidth / 2,
+          55,
+          {
+            align:
+              'center'
+          }
+        );
+
+
+        pdf.setFontSize(
+          18
+        );
+
+
+        pdf.text(
+          'My Adventure',
+          pageWidth / 2,
+          68,
+          {
+            align:
+              'center'
+          }
+        );
+
+
+        pdf.setFont(
+          'helvetica',
+          'normal'
+        );
+
+
+        pdf.setFontSize(
+          12
+        );
+
+
+        pdf.text(
+          `Created with ${chapters.length} chapter${chapters.length === 1 ? '' : 's'}`,
+          pageWidth / 2,
+          80,
+          {
+            align:
+              'center'
+          }
+        );
+
+
+        if (
+          chapters[0] &&
+          chapters[0].drawing
+        ) {
+
+          await addImageToPDF(
+
+            pdf,
+
+            chapters[0].drawing,
+
+            margin,
+
+            100,
+
+            pageWidth - margin * 2,
+
+            105
+
+          );
+
+        }
+
+
+        pdf.setFontSize(
+          10
+        );
+
+
+        pdf.text(
+          'A DoodleTales Story',
+          pageWidth / 2,
+          pageHeight - 20,
+          {
+            align:
+              'center'
+          }
+        );
+
+
+        for (
+          let i = 0;
+          i < chapters.length;
+          i++
+        ) {
+
+          const chapter =
+            chapters[i];
+
+
+          pdf.addPage();
+
+
+          pdf.setFont(
+            'helvetica',
+            'bold'
+          );
+
+
+          pdf.setFontSize(
+            20
+          );
+
+
+          pdf.text(
+            `Chapter ${chapter.number}`,
+            margin,
+            25
+          );
+
+
+          if (
+            chapter.character
+          ) {
+
+            pdf.setFont(
+              'helvetica',
+              'normal'
+            );
+
+
+            pdf.setFontSize(
+              10
+            );
+
+
+            pdf.text(
+              `Character: ${chapter.character}`,
+              margin,
+              33
+            );
+
+          }
+
+
+          await addImageToPDF(
+
+            pdf,
+
+            chapter.drawing,
+
+            margin,
+
+            42,
+
+            pageWidth - margin * 2,
+
+            105
+
+          );
+
+
+          pdf.setFont(
+            'helvetica',
+            'bold'
+          );
+
+
+          pdf.setFontSize(
+            13
+          );
+
+
+          pdf.text(
+            'The Adventure',
+            margin,
+            162
+          );
+
+
+          pdf.setFont(
+            'helvetica',
+            'normal'
+          );
+
+
+          pdf.setFontSize(
+            11
+          );
+
+
+          const storyLines =
+            pdf.splitTextToSize(
+              chapter.story,
+              pageWidth -
+                margin * 2
+            );
+
+
+          let y =
+            173;
+
+
+          for (
+            const line
+            of storyLines
+          ) {
+
+            if (
+              y >
+              pageHeight - 20
+            ) {
+
+              pdf.addPage();
+
+              y = 25;
+
+            }
+
+
+            pdf.text(
+              line,
+              margin,
+              y
+            );
+
+
+            y += 6;
+
+          }
+
+
+          pdf.setFontSize(
+            9
+          );
+
+
+          pdf.text(
+            `${i + 1}`,
+            pageWidth - margin,
+            pageHeight - 10,
+            {
+              align:
+                'right'
+            }
+          );
+
+        }
+
+
+        pdf.save(
+          'DoodleTales-My-Story.pdf'
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          '❌ PDF error:',
+          error
+        );
+
+
+        alert(
+          'Could not create the PDF.'
+        );
+
+
+      } finally {
+
+        pdfButton.disabled =
+          false;
+
+
+        pdfButton.textContent =
+          '📄 Save as PDF';
+
+      }
+
+    }
+
+
+    // ========================================================
+    // ADD IMAGE TO PDF
+    // ========================================================
+
+    function addImageToPDF(
+      pdf,
+      imageData,
+      x,
+      y,
+      maxWidth,
+      maxHeight
+    ) {
+
+      return new Promise(
+        resolve => {
+
+          const img =
+            new Image();
+
+
+          img.onload =
+            () => {
+
+              const imageRatio =
+                img.width /
+                img.height;
+
+
+              let width =
+                maxWidth;
+
+
+              let height =
+                width /
+                imageRatio;
+
+
+              if (
+                height >
+                maxHeight
+              ) {
+
+                height =
+                  maxHeight;
+
+                width =
+                  height *
+                  imageRatio;
+
+              }
+
+
+              const centeredX =
+                x +
+                (
+                  maxWidth -
+                  width
+                ) / 2;
+
+
+              pdf.addImage(
+
+                imageData,
+
+                'JPEG',
+
+                centeredX,
+
+                y,
+
+                width,
+                height
+
+              );
+
+
+              resolve();
+
+            };
+
+
+          img.onerror =
+            () => {
+
+              resolve();
+
+            };
+
+
+          img.src =
+            imageData;
+
+        }
+      );
+
+    }
+
+
+    // ========================================================
+    // EVENT LISTENERS
+    // ========================================================
+
+    captureButton.addEventListener(
+      'click',
+      scanDrawing
+    );
+
+
+    finishButton.addEventListener(
+      'click',
+      finishStory
+    );
+
+
+    pdfButton.addEventListener(
+      'click',
+      saveAsPDF
+    );
+
+
+    newStoryButton.addEventListener(
+      'click',
+      newStory
+    );
+
+
+    // ========================================================
+    // START CAMERA
+    // ========================================================
+
+    startCamera();
+
+  </script>
+
+</body>
+
+</html>
