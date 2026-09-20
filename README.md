@@ -38,3 +38,6 @@ DoodleTales makes storytelling more interactive by combining children's creativi
 ## 👥 Built For
 
 EmberHacks 2026
+
+## 🔗 Deployed Application
+https://doodletales-2.vercel.app/
